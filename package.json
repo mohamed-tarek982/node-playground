@@ -1,0 +1,11 @@
+{
+  "name": "node-play-ground",
+  "version": "1.0.0",
+  "description": "Node.js playground using the built-in http module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js"
+  },
+  "license": "ISC"
+}
