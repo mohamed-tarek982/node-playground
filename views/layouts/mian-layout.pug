@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    //- Dynamic Title
+    title= pageTitle
+    link(rel="stylesheet" href="/css/products.css")
+    block styles
+
+  body
+    header.navbar
+      a.logo(href="/") MyShop
+      nav
+        a(href="/") Home
+        a(href="/shop/products" class=(pageTitle === "Products" ? "active" : "")) Products
+        a(href="#") Cart
+
+
+  
+    block content
+
+    footer.footer &copy; 2026 MyShop. All rights reserved.

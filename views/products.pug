@@ -1,57 +1,42 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title Shop - Products
-    link(rel="stylesheet" href="/css/products.css")
+extends layouts/mian-layout.pug
 
-  body
-    header.navbar
-      a.logo(href="/") MyShop
-      nav
-        a(href="/") Home
-        a.active(href="/products") Products
-        a(href="#") Cart
+block content
+  main.container
+    //- Dynamic Data Rendering
+    h1 #{pageTitle}
+    section.products
+      article.card
+        img(src="https://picsum.photos/seed/shoes/400/300" alt="Sneakers")
+        .card-body
+          h2 Sneakers
+          p Comfortable everyday running shoes.
+          .card-footer
+            span.price $59.99
+            button Add to cart
 
-    main.container
-      h1 Our Products
+      article.card
+        img(src="https://picsum.photos/seed/watch/400/300" alt="Watch")
+        .card-body
+          h2 Smart Watch
+          p Track your fitness and notifications.
+          .card-footer
+            span.price $129.00
+            button Add to cart
 
-      section.products
-        article.card
-          img(src="https://picsum.photos/seed/shoes/400/300" alt="Sneakers")
-          .card-body
-            h2 Sneakers
-            p Comfortable everyday running shoes.
-            .card-footer
-              span.price $59.99
-              button Add to cart
+      article.card
+        img(src="https://picsum.photos/seed/bag/400/300" alt="Backpack")
+        .card-body
+          h2 Backpack
+          p Water-resistant bag for work and travel.
+          .card-footer
+            span.price $39.50
+            button Add to cart
 
-        article.card
-          img(src="https://picsum.photos/seed/watch/400/300" alt="Watch")
-          .card-body
-            h2 Smart Watch
-            p Track your fitness and notifications.
-            .card-footer
-              span.price $129.00
-              button Add to cart
-
-        article.card
-          img(src="https://picsum.photos/seed/bag/400/300" alt="Backpack")
-          .card-body
-            h2 Backpack
-            p Water-resistant bag for work and travel.
-            .card-footer
-              span.price $39.50
-              button Add to cart
-
-        article.card
-          img(src="https://picsum.photos/seed/headphones/400/300" alt="Headphones")
-          .card-body
-            h2 Headphones
-            p Wireless over-ear with noise cancelling.
-            .card-footer
-              span.price $89.99
-              button Add to cart
-
-    footer.footer &copy; 2026 MyShop. All rights reserved.
+      article.card
+        img(src="https://picsum.photos/seed/headphones/400/300" alt="Headphones")
+        .card-body
+          h2 Headphones
+          p Wireless over-ear with noise cancelling.
+          .card-footer
+            span.price $89.99
+            button Add to cart
