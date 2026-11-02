@@ -1,21 +1,15 @@
 const express = require("express");
 
+const productsController = require("../controllers/products");
+
 const router = express.Router();
 
 // GET /admin/add-product
 router.get("/add-product", (req, res) => {
-  res.send(`
-    <form action="/admin/product-details" method="POST">
-      <input type="text" name="productName" />
-      <button type="submit">Submit</button>
-    </form>
-  `);
+  res.render("add-product", { pageTitle: "Add Product" });
 });
 
 // POST /admin/product-details
-router.post("/product-details", (req, res) => {
-  console.log(req.body);
-  res.send(`<h1>Product title: ${req.body.productName}</h1>`);
-});
+router.post("/add-product", productsController.postAddProduct);
 
 module.exports = router;

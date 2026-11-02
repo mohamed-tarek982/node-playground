@@ -12,8 +12,8 @@ html(lang="en")
     header.navbar
       a.logo(href="/") MyShop
       nav
-        a(href="/") Home
         a(href="/shop/products" class=(pageTitle === "Products" ? "active" : "")) Products
+        a(href="/admin/add-product" class=(pageTitle === "Add Product" ? "active" : "")) Add Product
         a(href="#") Cart
 
 
