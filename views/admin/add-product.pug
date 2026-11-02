@@ -1,4 +1,4 @@
-extends layouts/mian-layout.pug
+extends ../layouts/mian-layout.pug
 
 block styles
   link(rel="stylesheet" href="/css/add-product.css")
@@ -10,4 +10,13 @@ block content
       .form-group
         label(for="productName") Product Name
         input#productName(type="text" name="productName" placeholder="Enter product name" required)
+      .form-group
+        label(for="price") Price
+        input#price(type="number" name="price" step="0.01" min="0" placeholder="Enter price" required)
+      .form-group
+        label(for="imageUrl") Image URL
+        input#imageUrl(type="url" name="imageUrl" placeholder="Enter image URL" required)
+      .form-group
+        label(for="description") Description
+        textarea#description(name="description" rows="4" placeholder="Enter description" required)
       button(type="submit") Add Product

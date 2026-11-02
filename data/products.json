@@ -1,1 +1,9 @@
-[{"title":"test"},{"title":"hello"},{"title":"Demo"}]
+[
+  {
+    "title": "test",
+    "price": 50,
+    "imageUrl": "https://picsum.photos/200",
+    "description": "Short description for product\r\n",
+    "id": "8baec8da-b3c4-4331-b79e-6f64362beb7f"
+  }
+]

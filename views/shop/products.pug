@@ -1,4 +1,4 @@
-extends layouts/mian-layout.pug
+extends ../layouts/mian-layout.pug
 
 block content
   main.container
@@ -8,8 +8,14 @@ block content
       section.products
         each product in products
           article.card
+            if product.imageUrl
+              img(src=product.imageUrl alt=product.title)
             .card-body
               h2= product.title
+              if product.price !== undefined
+                p.price $#{product.price}
+              if product.description
+                p= product.description
     else
       p No products found.
 

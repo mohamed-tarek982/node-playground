@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 // pathes for data directory and products.json file
 const dataDir = path.join(__dirname, "..", "data");
 const filePath = path.join(dataDir, "products.json");
@@ -12,12 +13,16 @@ const readProducts = () => {
   }
 };
 class Product {
-  constructor(title) {
+  constructor(title, price, imageUrl, description) {
     this.title = title;
+    this.price = Number(price);
+    this.imageUrl = imageUrl;
+    this.description = description;
   }
 
   save() {
     const products = readProducts();
+    this.id = crypto.randomUUID();
     products.push(this);
     // create the data directory if it doesn't exist  
     fs.mkdirSync(dataDir, { recursive: true });
