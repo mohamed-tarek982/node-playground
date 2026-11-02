@@ -1,8 +1,13 @@
 extends layouts/mian-layout.pug
 
+block styles
+  link(rel="stylesheet" href="/css/add-product.css")
+
 block content
   main.container
     h1 #{pageTitle}
-    form(action="/admin/add-product" method="POST")
-      input(type="text" name="productName")
-      button(type="submit") Submit
+    form.product-form(action="/admin/add-product" method="POST")
+      .form-group
+        label(for="productName") Product Name
+        input#productName(type="text" name="productName" placeholder="Enter product name" required)
+      button(type="submit") Add Product
