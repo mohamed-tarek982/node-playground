@@ -5,5 +5,12 @@
     "imageUrl": "https://picsum.photos/200",
     "description": "Short description for product\r\n",
     "id": "8baec8da-b3c4-4331-b79e-6f64362beb7f"
+  },
+  {
+    "id": "aca634db-dd34-452d-b478-1e271541487b",
+    "title": "hello",
+    "price": 33,
+    "imageUrl": "https://picsum.photos/200",
+    "description": "Second short desc"
   }
 ]

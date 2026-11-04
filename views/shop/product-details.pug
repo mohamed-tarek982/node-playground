@@ -1,0 +1,13 @@
+extends ../layouts/mian-layout.pug
+
+block content
+  main.container
+    h1= product.title
+    article.card
+      if product.imageUrl
+        img(src=product.imageUrl alt=product.title)
+      .card-body
+        p.price $#{product.price}
+        if product.description
+          p= product.description
+        a(href="/shop/products") Back to products

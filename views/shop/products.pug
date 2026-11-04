@@ -16,6 +16,7 @@ block content
                 p.price $#{product.price}
               if product.description
                 p= product.description
+              a.btn(href=`/shop/product-details/${product.id}`) Details
     else
       p No products found.
 
