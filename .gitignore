@@ -21,3 +21,6 @@ logs
 .idea
 
 
+
+# Environment
+.env

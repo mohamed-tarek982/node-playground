@@ -1,42 +1,43 @@
-const fs = require("fs");
-const path = require("path");
 const crypto = require("crypto");
-// pathes for data directory and products.json file
-const dataDir = path.join(__dirname, "..", "data");
-const filePath = path.join(dataDir, "products.json");
-// function to read products from the JSON file
-const readProducts = () => {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, "utf8"));
-  } catch (err) {
-    return [];
-  }
-};
+const { pool } = require("../utils/database");
+
 class Product {
-  constructor(title, price, imageUrl, description) {
-    this.id = crypto.randomUUID(); // generate a unique ID for each product
-    this.title = title;
+  constructor({ id, title, price, imageUrl, description }) {
+    this.id = id || crypto.randomUUID();
+    this.title = title?.trim();
     this.price = Number(price);
-    this.imageUrl = imageUrl;
-    this.description = description;
+    this.imageUrl = imageUrl?.trim() || null;
+    this.description = description?.trim() || null;
   }
 
-  save() {
-    const products = readProducts();
-    products.push(this);
-    // create the data directory if it doesn't exist
-    fs.mkdirSync(dataDir, { recursive: true });
-    // write the updated products array to the JSON file
-    fs.writeFileSync(filePath, JSON.stringify(products));
+  // returns a list of error messages; empty when valid
+  validate() {
+    const errors = [];
+    if (!this.title) errors.push("Title is required.");
+    if (!Number.isFinite(this.price) || this.price < 0) {
+      errors.push("Price must be a non-negative number.");
+    }
+    return errors;
   }
 
-  static fetchAll() {
-    // return the products read from the JSON file
-    return readProducts();
+  async save() {
+    await pool.execute(
+      "INSERT INTO product (id, title, price, imageUrl, description) VALUES (?, ?, ?, ?, ?)",
+      [this.id, this.title, this.price, this.imageUrl, this.description],
+    );
+    return this;
   }
 
-  static findById(id) {
-    return readProducts().find((product) => product.id === id);
+  static async fetchAll() {
+    const [rows] = await pool.execute("SELECT * FROM product");
+    return rows.map((row) => new Product(row));
+  }
+
+  static async findById(id) {
+    const [rows] = await pool.execute("SELECT * FROM product WHERE id = ?", [
+      id,
+    ]);
+    return rows[0] ? new Product(rows[0]) : null;
   }
 }
 
