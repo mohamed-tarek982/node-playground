@@ -1,44 +1,48 @@
-const crypto = require("crypto");
-const { pool } = require("../utils/database");
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../utils/database");
 
-class Product {
-  constructor({ id, title, price, imageUrl, description }) {
-    this.id = id || crypto.randomUUID();
-    this.title = title?.trim();
-    this.price = Number(price);
-    this.imageUrl = imageUrl?.trim() || null;
-    this.description = description?.trim() || null;
-  }
+// trims strings and turns empty values into null
+const trimmed = (field) =>
+  function (value) {
+    const v = typeof value === "string" ? value.trim() : value;
+    this.setDataValue(field, v === "" ? null : v);
+  };
 
-  // returns a list of error messages; empty when valid
-  validate() {
-    const errors = [];
-    if (!this.title) errors.push("Title is required.");
-    if (!Number.isFinite(this.price) || this.price < 0) {
-      errors.push("Price must be a non-negative number.");
-    }
-    return errors;
-  }
-
-  async save() {
-    await pool.execute(
-      "INSERT INTO product (id, title, price, imageUrl, description) VALUES (?, ?, ?, ?, ?)",
-      [this.id, this.title, this.price, this.imageUrl, this.description],
-    );
-    return this;
-  }
-
-  static async fetchAll() {
-    const [rows] = await pool.execute("SELECT * FROM product");
-    return rows.map((row) => new Product(row));
-  }
-
-  static async findById(id) {
-    const [rows] = await pool.execute("SELECT * FROM product WHERE id = ?", [
-      id,
-    ]);
-    return rows[0] ? new Product(rows[0]) : null;
-  }
-}
+const Product = sequelize.define(
+  "product",
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      set: trimmed("title"),
+      validate: { notEmpty: { msg: "Title is required." } },
+    },
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      validate: {
+        isDecimal: { msg: "Price must be a non-negative number." },
+        min: { args: [0], msg: "Price must be a non-negative number." },
+      },
+    },
+    imageUrl: {
+      type: DataTypes.STRING(2048),
+      set: trimmed("imageUrl"),
+    },
+    description: {
+      type: DataTypes.TEXT,
+      set: trimmed("description"),
+    },
+  },
+  {
+    tableName: "product",
+    timestamps: true,
+  },
+);
 
 module.exports = Product;
