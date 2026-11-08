@@ -32,13 +32,12 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong. Please try again later.");
 });
 
-const db = require("./utils/database");
+const { sequelize, createDatabase } = require("./utils/database");
 
-db.init()
+createDatabase()
+  .then(() => sequelize.sync())
   .then(() => {
-    app.listen(3000, () => {
-      console.log("Server is running on http://localhost:3000");
-    });
+    app.listen(3000);
   })
   .catch((err) => {
     console.error("Failed to initialize database:", err);

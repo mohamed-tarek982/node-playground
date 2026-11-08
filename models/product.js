@@ -1,15 +1,12 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../utils/database");
 
-// trims strings and turns empty values into null
-const trimmed = (field) =>
-  function (value) {
-    const v = typeof value === "string" ? value.trim() : value;
-    this.setDataValue(field, v === "" ? null : v);
-  };
 
+// Sequelize model for the Product entity
 const Product = sequelize.define(
+  // model name
   "product",
+  // model attributes
   {
     id: {
       type: DataTypes.UUID,
@@ -19,30 +16,34 @@ const Product = sequelize.define(
     title: {
       type: DataTypes.STRING,
       allowNull: false,
-      set: trimmed("title"),
       validate: { notEmpty: { msg: "Title is required." } },
     },
     price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       validate: {
-        isDecimal: { msg: "Price must be a non-negative number." },
-        min: { args: [0], msg: "Price must be a non-negative number." },
+        isDecimal: { msg: "Price must be a decimal number." },
+        min: { args: [0], msg: "Price must be greater than or equal to 0." },
       },
     },
     imageUrl: {
       type: DataTypes.STRING(2048),
-      set: trimmed("imageUrl"),
+      allowNull: true,
     },
     description: {
       type: DataTypes.TEXT,
-      set: trimmed("description"),
+      allowNull: true,
     },
   },
+  // model options
   {
+    //If you want the explicit table name avoid mnaual sequeilze pluralization
     tableName: "product",
+    // this will automatically add createdAt and updatedAt columns to the table
     timestamps: true,
   },
 );
 
 module.exports = Product;
+
+

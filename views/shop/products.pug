@@ -17,6 +17,9 @@ block content
               if product.description
                 p= product.description
               a.btn(href=`/shop/product-details/${product.id}`) Details
+              a.btn(href=`/admin/edit-product/${product.id}`) Edit
+              form(action=`/admin/delete-product/${product.id}` method="POST" style="display:inline" onsubmit="return confirm('Delete this product?')")
+                button.btn(type="submit") Delete
     else
       p No products found.
 

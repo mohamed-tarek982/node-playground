@@ -19,18 +19,16 @@ const sequelize = new Sequelize(DB_NAME, config.user, config.password, {
   dialectOptions: { decimalNumbers: true }, // DECIMAL as numbers, not strings
 });
 
-// create the database if missing, then sync models to tables
-const init = async () => {
-  // Sequelize can't create the database itself, so use a raw connection first
+// Sequelize can't create the database itself, so use a raw connection first
+const createDatabase = async () => {
   const connection = await mysql.createConnection(config);
   try {
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
   } finally {
     await connection.end();
   }
-
-  require("../models/product"); // register models before syncing
-  await sequelize.sync();
 };
 
-module.exports = { sequelize, init };
+module.exports = { sequelize, createDatabase };
+
+
