@@ -12,8 +12,7 @@ app.set("views", "views");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-const User = require("./models/user");
-const Product = require("./models/product");
+const { User, sequelize } = require("./models");
 
 // attach the current user to every request (must come before the routes)
 app.use((req, res, next) => {
@@ -45,10 +44,7 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong. Please try again later.");
 });
 
-const { sequelize, createDatabase } = require("./utils/database");
-
-Product.belongsTo(User, { onDelete: "CASCADE" });
-User.hasMany(Product);
+const { createDatabase } = require("./utils/database");
 
 createDatabase()
   .then(() => sequelize.sync()) // set force: true to drop and recreate tables on every server restart

@@ -1,5 +1,5 @@
 const { ValidationError } = require("sequelize");
-const Product = require("../models/product");
+const { Product } = require("../models");
 
 exports.getAddProduct = (req, res) => {
   res.render("admin/add-product", { pageTitle: "Add Product" });
