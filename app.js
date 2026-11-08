@@ -12,6 +12,19 @@ app.set("views", "views");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
+const User = require("./models/user");
+const Product = require("./models/product");
+
+// attach the current user to every request (must come before the routes)
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch(next);
+});
+
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
@@ -34,10 +47,27 @@ app.use((err, req, res, next) => {
 
 const { sequelize, createDatabase } = require("./utils/database");
 
+Product.belongsTo(User, { onDelete: "CASCADE" });
+User.hasMany(Product);
+
 createDatabase()
-  .then(() => sequelize.sync())
+  .then(() => sequelize.sync()) // set force: true to drop and recreate tables on every server restart
+  .then(() => User.findOne({ where: { email: "test@test.com" } }))
+  .then((user) => {
+    if (!user) {
+      return User.create({
+        id: 1,
+        name: "Tarek",
+        email: "test@test.com",
+      });
+    }
+
+    return user;
+  })
   .then(() => {
-    app.listen(3000);
+    app.listen(3000, () => {
+      console.log("Server is running on http://localhost:3000");
+    });
   })
   .catch((err) => {
     console.error("Failed to initialize database:", err);

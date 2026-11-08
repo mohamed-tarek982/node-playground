@@ -1,7 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../utils/database");
 
-
 // Sequelize model for the Product entity
 const Product = sequelize.define(
   // model name
@@ -35,15 +34,6 @@ const Product = sequelize.define(
       allowNull: true,
     },
   },
-  // model options
-  {
-    //If you want the explicit table name avoid mnaual sequeilze pluralization
-    tableName: "product",
-    // this will automatically add createdAt and updatedAt columns to the table
-    timestamps: true,
-  },
 );
 
 module.exports = Product;
-
-

@@ -9,7 +9,12 @@ exports.postAddProduct = async (req, res) => {
   const { productName, price, imageUrl, description } = req.body;
 
   try {
-    await Product.create({ title: productName, price, imageUrl, description });
+    await req.user.createProduct({
+      title: productName,
+      price,
+      imageUrl,
+      description,
+    });
   } catch (err) {
     if (err instanceof ValidationError) {
       return res.status(422).send(err.errors.map((e) => e.message).join(" "));
@@ -43,7 +48,7 @@ exports.postEditProduct = async (req, res) => {
     throw err;
   }
 
-  res.redirect(`/shop/product-details/${product.id}`);
+  res.redirect(`/shop/products`);
 };
 
 exports.postDeleteProduct = async (req, res) => {
