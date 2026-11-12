@@ -18,5 +18,7 @@ block content
                 input(type="hidden" name="productId" value=product.id)
                 button.btn(type="submit") Delete
       h2 Total: $#{total.toFixed(2)}
+      form(action="/shop/create-order" method="POST")
+        button.btn(type="submit") Order Now
     else
       p Your cart is empty.

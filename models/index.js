@@ -3,6 +3,8 @@ const User = require("./user");
 const Product = require("./product");
 const Cart = require("./cart");
 const CartItem = require("./cart-item");
+const Order = require("./order");
+const OrderItem = require("./order-item");
 
 // Associations
 // Single to many relationship between User and Product
@@ -17,5 +19,13 @@ Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
 
+// One-to-many relationship between User and Order
+Order.belongsTo(User, { onDelete: "CASCADE" });
+User.hasMany(Order);
+
+// Many-to-many relationship between Order and Product through OrderItem
+Order.belongsToMany(Product, { through: OrderItem });
+Product.belongsToMany(Order, { through: OrderItem });
+
 // Export the models and sequelize instance
-module.exports = { sequelize, User, Product, Cart, CartItem };
+module.exports = { sequelize, User, Product, Cart, CartItem, Order, OrderItem };
