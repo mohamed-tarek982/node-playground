@@ -60,6 +60,9 @@ createDatabase()
 
     return user;
   })
+  .then((user) => {
+    user.createCart(); // create a cart for the user if it doesn't exist
+  })
   .then(() => {
     app.listen(3000, () => {
       console.log("Server is running on http://localhost:3000");

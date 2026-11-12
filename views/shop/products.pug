@@ -16,10 +16,14 @@ block content
                 p.price $#{product.price}
               if product.description
                 p= product.description
-              a.btn(href=`/shop/product-details/${product.id}`) Details
-              a.btn(href=`/admin/edit-product/${product.id}`) Edit
-              form(action=`/admin/delete-product/${product.id}` method="POST" style="display:inline" onsubmit="return confirm('Delete this product?')")
-                button.btn(type="submit") Delete
+              .card-actions
+                form(action="/shop/cart" method="POST")
+                  input(type="hidden" name="productId" value=product.id)
+                  button.btn.btn-primary(type="submit") Add to Cart
+                a.btn.btn-outline(href=`/shop/product-details/${product.id}`) Details
+                a.btn.btn-outline(href=`/admin/edit-product/${product.id}`) Edit
+                form(action=`/admin/delete-product/${product.id}` method="POST" onsubmit="return confirm('Delete this product?')")
+                  button.btn.btn-danger(type="submit") Delete
     else
       p No products found.
 

@@ -1,0 +1,22 @@
+extends ../layouts/mian-layout.pug
+
+block content
+  main.container
+    h1 #{pageTitle}
+    if products.length > 0
+      section.products
+        each product in products
+          article.card
+            if product.imageUrl
+              img(src=product.imageUrl alt=product.title)
+            .card-body
+              h2= product.title
+              p.price $#{product.price}
+              p Quantity: #{product.cartItem.quantity}
+              p Subtotal: $#{(Number(product.price) * product.cartItem.quantity).toFixed(2)}
+              form(action="/shop/cart-delete-item" method="POST")
+                input(type="hidden" name="productId" value=product.id)
+                button.btn(type="submit") Delete
+      h2 Total: $#{total.toFixed(2)}
+    else
+      p Your cart is empty.
