@@ -7,7 +7,7 @@ block content
   - const p = product || {}
   main.container
     h1 #{pageTitle}
-    form.product-form(action=product ? `/admin/edit-product/${product.id}` : "/admin/add-product" method="POST")
+    form.product-form(action=product ? `/admin/edit-product/${product._id}` : "/admin/add-product" method="POST")
       .form-group
         label(for="productName") Product Name
         input#productName(type="text" name="productName" placeholder="Enter product name" value=p.title required)

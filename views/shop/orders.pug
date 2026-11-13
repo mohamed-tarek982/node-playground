@@ -6,10 +6,10 @@ block content
     if orders.length > 0
       each order in orders
         section.order
-          h2 Order ##{order.id} - #{order.createdAt.toLocaleString()}
+          h2 Order ##{order._id} - #{order.createdAt.toLocaleString()}
           ul
             each product in order.products
-              li #{product.title} (#{product.orderItem.quantity} x $#{product.orderItem.price})
+              li #{product.title} (#{product.quantity} x $#{product.price})
           p
             strong Total: $#{order.total.toFixed(2)}
     else

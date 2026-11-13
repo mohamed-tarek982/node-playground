@@ -8,14 +8,14 @@ block content
         each product in products
           article.card
             if product.imageUrl
-              img(src=product.imageUrl alt=product.title)
+              img(src=product.imageUrl alt=product.title loading="lazy" referrerpolicy="no-referrer")
             .card-body
               h2= product.title
               p.price $#{product.price}
-              p Quantity: #{product.cartItem.quantity}
-              p Subtotal: $#{(Number(product.price) * product.cartItem.quantity).toFixed(2)}
+              p Quantity: #{product.quantity}
+              p Subtotal: $#{(Number(product.price) * product.quantity).toFixed(2)}
               form(action="/shop/cart-delete-item" method="POST")
-                input(type="hidden" name="productId" value=product.id)
+                input(type="hidden" name="productId" value=product._id)
                 button.btn(type="submit") Delete
       h2 Total: $#{total.toFixed(2)}
       form(action="/shop/create-order" method="POST")

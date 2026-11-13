@@ -12,16 +12,19 @@ app.set("views", "views");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-const { User, sequelize } = require("./models");
+const { User } = require("./models");
+
+// The test user's id, set once the database is connected
+let currentUserId;
 
 // attach the current user to every request (must come before the routes)
-app.use((req, res, next) => {
-  User.findByPk(1)
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch(next);
+app.use(async (req, res, next) => {
+  try {
+    req.user = await User.findById(currentUserId);
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 const adminRoutes = require("./routes/admin");
@@ -44,24 +47,12 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong. Please try again later.");
 });
 
-const { createDatabase } = require("./utils/database");
+const { mongoConnect } = require("./utils/database");
 
-createDatabase()
-  .then(() => sequelize.sync()) // set force: true to drop and recreate tables on every server restart
-  .then(() => User.findOne({ where: { email: "test@test.com" } }))
+mongoConnect()
+  .then(() => User.findOrCreate({ name: "Tarek", email: "test@test.com" }))
   .then((user) => {
-    if (!user) {
-      return User.create({
-        id: 1,
-        name: "Tarek",
-        email: "test@test.com",
-      });
-    }
-
-    return user;
-  })
-  .then((user) => {
-    user.createCart(); // create a cart for the user if it doesn't exist
+    currentUserId = user._id;
   })
   .then(() => {
     app.listen(3000, () => {

@@ -9,7 +9,7 @@ block content
         each product in products
           article.card
             if product.imageUrl
-              img(src=product.imageUrl alt=product.title)
+              img(src=product.imageUrl alt=product.title loading="lazy" referrerpolicy="no-referrer")
             .card-body
               h2= product.title
               if product.price !== undefined
@@ -18,11 +18,11 @@ block content
                 p= product.description
               .card-actions
                 form(action="/shop/cart" method="POST")
-                  input(type="hidden" name="productId" value=product.id)
+                  input(type="hidden" name="productId" value=product._id)
                   button.btn.btn-primary(type="submit") Add to Cart
-                a.btn.btn-outline(href=`/shop/product-details/${product.id}`) Details
-                a.btn.btn-outline(href=`/admin/edit-product/${product.id}`) Edit
-                form(action=`/admin/delete-product/${product.id}` method="POST" onsubmit="return confirm('Delete this product?')")
+                a.btn.btn-outline(href=`/shop/product-details/${product._id}`) Details
+                a.btn.btn-outline(href=`/admin/edit-product/${product._id}`) Edit
+                form(action=`/admin/delete-product/${product._id}` method="POST" onsubmit="return confirm('Delete this product?')")
                   button.btn.btn-danger(type="submit") Delete
     else
       p No products found.

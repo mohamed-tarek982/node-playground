@@ -1,13 +1,19 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../utils/database");
+const { getDb } = require("../utils/database");
 
-// Sequelize model for the Order entity (a user can have many orders)
-const Order = sequelize.define("order", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-});
+const collection = () => getDb().collection("orders");
+
+class Order {
+  // items: [{ productId, title, price, quantity }] - a snapshot taken at order time
+  static async create(userId, items) {
+    const doc = { userId, items, createdAt: new Date() };
+    await collection().insertOne(doc); // insertOne sets doc._id
+    return doc;
+  }
+
+  static async findByUser(userId) {
+    const orders = await collection().find({ userId }).toArray();
+    return orders;
+  }
+}
 
 module.exports = Order;

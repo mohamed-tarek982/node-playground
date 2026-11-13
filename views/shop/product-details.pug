@@ -5,7 +5,7 @@ block content
     h1= product.title
     article.card
       if product.imageUrl
-        img(src=product.imageUrl alt=product.title)
+        img(src=product.imageUrl alt=product.title referrerpolicy="no-referrer")
       .card-body
         p.price $#{product.price}
         if product.description
