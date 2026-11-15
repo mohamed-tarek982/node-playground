@@ -1,18 +1,9 @@
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 
-const client = new MongoClient(process.env.MONGODB_URI);
-let db;
+// Connect once at startup; mongoose keeps and reuses the connection pool
+const mongoConnect = () =>
+  mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB_NAME || "shop",
+  });
 
-// Connect once at startup and reuse the same connection pool everywhere
-const mongoConnect = async () => {
-  await client.connect();
-  db = client.db(process.env.MONGODB_DB_NAME || "shop");
-  return db;
-};
-
-const getDb = () => {
-  if (!db) throw new Error("Database not connected. Call mongoConnect() first.");
-  return db;
-};
-
-module.exports = { mongoConnect, getDb };
+module.exports = { mongoConnect };

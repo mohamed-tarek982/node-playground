@@ -1,19 +1,20 @@
-const { getDb } = require("../utils/database");
+const mongoose = require("mongoose");
 
-const collection = () => getDb().collection("orders");
+// items: a snapshot of the cart products taken at order time
+const orderSchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    items: [
+      {
+        _id: false,
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+        title: String,
+        price: Number,
+        quantity: Number,
+      },
+    ],
+  },
+  { timestamps: { createdAt: true, updatedAt: false } },
+);
 
-class Order {
-  // items: [{ productId, title, price, quantity }] - a snapshot taken at order time
-  static async create(userId, items) {
-    const doc = { userId, items, createdAt: new Date() };
-    await collection().insertOne(doc); // insertOne sets doc._id
-    return doc;
-  }
-
-  static async findByUser(userId) {
-    const orders = await collection().find({ userId }).toArray();
-    return orders;
-  }
-}
-
-module.exports = Order;
+module.exports = mongoose.model("Order", orderSchema);

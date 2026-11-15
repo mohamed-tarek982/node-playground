@@ -3,12 +3,12 @@ const { Product } = require("../models");
 exports.getProducts = async (req, res) => {
   res.render("shop/products", {
     pageTitle: "Products",
-    products: await Product.findAll(),
+    products: await Product.find().populate("userId", "name email"), // populate the userId field with the user's name and email
   });
 };
 
 exports.getProductDetails = async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findByIdSafe(req.params.id);
   if (!product) {
     return res.status(404).render("404", { pageTitle: "Product Not Found" });
   }
@@ -20,15 +20,11 @@ exports.getProductDetails = async (req, res) => {
 
 exports.getCart = async (req, res) => {
   const products = await req.user.getCart();
-  const total = products.reduce(
-    (sum, p) => sum + p.price * p.quantity,
-    0,
-  );
+  const total = products.reduce((sum, p) => sum + p.price * p.quantity, 0);
   res.render("shop/cart", { pageTitle: "Cart", products, total });
 };
 
 exports.postCart = async (req, res) => {
-  // Adds the product with quantity 1, or increases its quantity if already in the cart
   await req.user.addToCart(req.body.productId);
   res.redirect("/shop/cart");
 };
