@@ -14,8 +14,6 @@ exports.getSignup = (req, res) => {
   renderSignup(res);
 };
 
-const bcrypt = require("bcryptjs");
-
 exports.postSignup = async (req, res, next) => {
   const email = (req.body.email || "").trim().toLowerCase();
   const { password = "" } = req.body;
@@ -38,21 +36,43 @@ exports.postSignup = async (req, res, next) => {
   }
 };
 
+const renderLogin = (
+  res,
+  { status = 200, errorMessage = null, email = "" } = {},
+) =>
+  res.status(status).render("auth/login", {
+    pageTitle: "Login",
+    errorMessage,
+    oldInput: { email },
+  });
+
 exports.getLogin = (req, res) => {
-  res.render("auth/login", { pageTitle: "Login" });
+  renderLogin(res);
 };
 
-exports.postLogin = async (req, res, next) => {
-  try {
-    // dummy login: load the test user by its id (set in app.js on startup)
-    const user = await User.findById(req.app.get("testUserId"));
-    if (!user) return res.redirect("/auth/login");
+const bcrypt = require("bcryptjs");
 
+exports.postLogin = async (req, res, next) => {
+  const email = (req.body.email || "").trim().toLowerCase();
+  const { password = "" } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    // same message for unknown email and wrong password so we don't leak which accounts exist
+    const passwordMatches =
+      user && user.password && (await bcrypt.compare(password, user.password));
+
+    if (!passwordMatches) {
+      return renderLogin(res, {
+        status: 422,
+        errorMessage: "Invalid email or password.",
+        email,
+      });
+    }
+
+    // Logic performed when the user is authenticated
     req.session.isLoggedIn = true;
-    // store as a plain string: connect-mongodb-session bundles bson 6, mongoose 9 uses bson 7,
-    // so a mongoose ObjectId can't be serialized by the session store
     req.session.currentUserId = user._id.toString();
-    // make sure the session is written to MongoDB before redirecting
     req.session.save((err) => {
       if (err) return next(err);
       res.redirect("/");

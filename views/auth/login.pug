@@ -6,11 +6,13 @@ block styles
 block content
   main.container
     h1 #{pageTitle}
+    if errorMessage
+      p.error-message= errorMessage
     form.product-form(action="/auth/login" method="POST")
       .form-group
         label(for="email") Email
-        input#email(type="email" name="email" placeholder="Enter email")
+        input#email(type="email" name="email" placeholder="Enter email" value=oldInput.email required)
       .form-group
         label(for="password") Password
-        input#password(type="password" name="password" placeholder="Enter password")
+        input#password(type="password" name="password" placeholder="Enter password" required)
       button(type="submit") Login
