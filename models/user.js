@@ -4,8 +4,10 @@ const Order = require("./order");
 
 // The cart is embedded in the user document: { cart: { items: [{ productId, quantity }] } }
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  name: { type: String },
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  // bcrypt hash; optional because the seeded test user has no password
+  password: { type: String },
   cart: {
     items: [
       {

@@ -1,0 +1,21 @@
+extends ../layouts/mian-layout.pug
+
+block styles
+  link(rel="stylesheet" href="/css/add-product.css")
+
+block content
+  main.container
+    h1 #{pageTitle}
+    if errorMessage
+      p.form-error= errorMessage
+    form.product-form(action="/auth/signup" method="POST")
+      .form-group
+        label(for="email") Email
+        input#email(type="email" name="email" placeholder="Enter email" value=oldInput.email required)
+      .form-group
+        label(for="password") Password
+        input#password(type="password" name="password" placeholder="Enter password" minlength="6" required)
+      .form-group
+        label(for="confirmPassword") Confirm Password
+        input#confirmPassword(type="password" name="confirmPassword" placeholder="Re-enter password" minlength="6" required)
+      button(type="submit") Sign Up

@@ -1,6 +1,44 @@
 const { User } = require("../models");
 
-exports.getLogin =(req, res) => {
+const renderSignup = (
+  res,
+  { status = 200, errorMessage = null, email = "" } = {},
+) =>
+  res.status(status).render("auth/signup", {
+    pageTitle: "Sign Up",
+    errorMessage,
+    oldInput: { email },
+  });
+
+exports.getSignup = (req, res) => {
+  renderSignup(res);
+};
+
+const bcrypt = require("bcryptjs");
+
+exports.postSignup = async (req, res, next) => {
+  const email = (req.body.email || "").trim().toLowerCase();
+  const { password = "" } = req.body;
+
+  try {
+    if (await User.exists({ email })) {
+      return renderSignup(res, {
+        status: 422,
+        errorMessage: "An account with this email already exists.",
+        email,
+      });
+    }
+    // ensure the password is hashed before storing it in the database
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    await User.create({ email, password: hashedPassword, cart: { items: [] } });
+    res.redirect("/auth/login");
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getLogin = (req, res) => {
   res.render("auth/login", { pageTitle: "Login" });
 };
 
@@ -31,4 +69,3 @@ exports.postLogout = (req, res, next) => {
     res.redirect("/");
   });
 };
-
