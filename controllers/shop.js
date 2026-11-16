@@ -1,6 +1,7 @@
 const { Product } = require("../models");
 
 exports.getProducts = async (req, res) => {
+  console.log("Current user:");
   res.render("shop/products", {
     pageTitle: "Products",
     products: await Product.find().populate("userId", "name email"), // populate the userId field with the user's name and email

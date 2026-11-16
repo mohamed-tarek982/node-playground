@@ -1,0 +1,16 @@
+extends ../layouts/mian-layout.pug
+
+block styles
+  link(rel="stylesheet" href="/css/add-product.css")
+
+block content
+  main.container
+    h1 #{pageTitle}
+    form.product-form(action="/auth/login" method="POST")
+      .form-group
+        label(for="email") Email
+        input#email(type="email" name="email" placeholder="Enter email")
+      .form-group
+        label(for="password") Password
+        input#password(type="password" name="password" placeholder="Enter password")
+      button(type="submit") Login

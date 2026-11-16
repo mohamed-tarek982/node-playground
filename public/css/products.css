@@ -209,3 +209,23 @@ button:focus-visible,
   color: #9ca3af;
   font-size: 0.9rem;
 }
+
+.navbar nav .logout-form {
+  display: inline;
+  margin-left: 1.5rem;
+}
+
+.navbar nav .logout-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.navbar nav .logout-btn:hover {
+  opacity: 1;
+  border-bottom: 2px solid #f59e0b;
+}

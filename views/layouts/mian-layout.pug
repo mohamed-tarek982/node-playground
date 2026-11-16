@@ -16,6 +16,11 @@ html(lang="en")
         a(href="/admin/add-product" class=(pageTitle === "Add Product" ? "active" : "")) Add Product
         a(href="/shop/cart" class=(pageTitle === "Cart" ? "active" : "")) Cart
         a(href="/shop/orders" class=(pageTitle === "Orders" ? "active" : "")) Orders
+        if isAuthenticated
+          form.logout-form(action="/auth/logout" method="POST")
+            button.logout-btn(type="submit") Logout
+        else
+          a(href="/auth/login" class=(pageTitle === "Login" ? "active" : "")) Login
 
 
   
